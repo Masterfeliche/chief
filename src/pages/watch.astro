@@ -12,18 +12,18 @@ const others = videos.filter((v) => v.id !== featured.id);
 const f = featured.data;
 ---
 <Base title="Watch — Azu" description="Azu's videos: the Juzi lyric video, and the Siku and Wote music videos. Watch here or on YouTube." image={f.poster}>
-  <section id={featured.id} style="position:relative">
-    <div class="clip clip--wide" style="border-radius:0;aspect-ratio:21/9;max-height:760px;min-height:420px">
+  <section class="feature" id={featured.id}>
+    <div class="feature__media">
       <video muted playsinline preload="none" poster={f.poster} data-seq={f.seq.join(",")} aria-hidden="true"></video>
       <a class="play play--lg" href={f.url} target="_blank" rel="noopener" aria-label={`Watch ${f.title} on YouTube`}><svg viewBox="0 0 12 12"><path d="M3 1.5v9l7-4.5z" fill="currentColor"/></svg></a>
-      <div class="clip__band" style="padding:clamp(24px,4vw,48px) var(--gutter);background:linear-gradient(0deg,var(--ink) 0%,rgba(11,10,9,.7) 70%,rgba(11,10,9,0) 100%);border-top:0;backdrop-filter:none">
-        <div class="wrap" style="display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;width:100%;padding:0">
-          <div class="stack" style="gap:12px">
-            <div class="chips"><span class="pill pill--acc">New</span><span class="pill">{f.kind}</span></div>
-            <h1 class="disp h1" style="font-size:clamp(56px,9vw,120px)">{f.title} <span class="ser">the film</span></h1>
-          </div>
-          <div class="cta-row"><a class="btn btn--acc" href={f.url} target="_blank" rel="noopener">Watch on YouTube ↗</a><a class="btn" href="/music">Stream the song</a></div>
+    </div>
+    <div class="feature__band">
+      <div class="wrap feature__in">
+        <div class="stack" style="gap:12px">
+          <div class="chips"><span class="pill pill--acc">New</span><span class="pill">{f.kind}</span></div>
+          <h1 class="disp h1 feature__title">{f.title} <span class="ser">the film</span></h1>
         </div>
+        <div class="cta-row"><a class="btn btn--acc" href={f.url} target="_blank" rel="noopener">Watch on YouTube ↗</a><a class="btn" href="/music">Stream the song</a></div>
       </div>
     </div>
   </section>
@@ -34,7 +34,7 @@ const f = featured.data;
       <div class="clips">
         {others.map((v) => <Clip video={v} id={v.id} play />)}
         <Clip video={featured} play />
-        <div class="card rv" style="justify-content:space-between;aspect-ratio:16/9">
+        <div class="card card--tile rv">
           <span class="mono" style="color:var(--mute)">Next</span>
           <div class="stack" style="gap:8px"><span class="h3">More films are coming.</span><p class="lede" style="font-size:15px">Every video premieres on the list a day before YouTube.</p></div>
           <a class="btn btn--acc" href="#join" style="align-self:flex-start">Get the premiere</a>

@@ -33,8 +33,8 @@ const jsonld = { "@context": "https://schema.org", "@type": "CollectionPage", na
   </section>
 
   <section class="sec dim" id={newest.id}>
-    <div class="wrap g2 g2--c" style="grid-template-columns:minmax(0,420px) minmax(0,1fr)">
-      <div class="book rv" style="flex:none;position:relative">
+    <div class="wrap g2 g2--c g2--split" style="--l:.55fr">
+      <div class="book book--feature rv" style="flex:none;position:relative">
         <a class="book__cover" href={n.read ?? `${walls}/${n.id}/`} target="_blank" rel="noopener"><img src={n.cover ?? `/assets/img/book-${n.id}.jpg`} width="1080" height="1440" alt={`${n.title} — book cover`} loading="lazy" /></a>
         <span class="pill pill--acc" style="position:absolute;top:-14px;left:24px">Newest</span>
       </div>

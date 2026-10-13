@@ -78,11 +78,12 @@ const pill: Record<string, [string, string]> = {
         <p class="lede">Festivals, venues, private events and brand shows. Everything you need — rider, stage plot, press photos — is one email away.</p>
         <div class="cta-row"><a class="btn btn--ink" href={`mailto:${site.email}?subject=Booking%20enquiry`}>Email bookings</a><a class="btn" href="/story#press">Press &amp; bio</a></div>
       </div>
-      <div class="g3 rv" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:14px">
-        <div class="card"><span class="mono m">Based in</span><span class="disp" style="font-size:clamp(26px,2.6vw,36px)">{site.city}</span></div>
-        <div class="card"><span class="mono m">Travels</span><span class="disp" style="font-size:clamp(26px,2.6vw,36px)">Worldwide</span></div>
-        <div class="card"><span class="mono m">Formats</span><span class="disp" style="font-size:clamp(26px,2.6vw,36px)">Band · Solo</span></div>
-        <div class="card"><span class="mono m">Contact</span><a class="disp" style="font-size:clamp(18px,1.8vw,22px);text-transform:none;word-break:break-all" href={`mailto:${site.email}`}>{site.email}</a></div>
+      <div class="g3 g3--two rv">
+        <div class="card"><span class="mono m">Based in</span><span class="disp stat">{site.city}</span></div>
+        <div class="card"><span class="mono m">Travels</span><span class="disp stat">Worldwide</span></div>
+        <div class="card"><span class="mono m">Formats</span><span class="disp stat">Band · Solo</span></div>
+        <div class="card"><span class="mono m">Sings in</span><span class="disp stat">Swahili</span></div>
+        <div class="card span-all"><span class="mono m">Contact</span><a class="disp stat stat--link" href={`mailto:${site.email}`}>{site.email}</a></div>
       </div>
     </div>
   </section>

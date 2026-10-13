@@ -12,7 +12,7 @@ const jsonld = { "@context": "https://schema.org", "@type": "Person", name: site
 ---
 <Base title="Story — Azu" description="Hi, I'm Azu. A Tanzanian singer, songwriter, producer and builder of the sound, the visuals and the world around my gift. This is the story so far." image="/assets/img/about.jpg" ogType="profile" jsonld={jsonld}>
   <section class="sec" id="top">
-    <div class="wrap g2" style="grid-template-columns:minmax(0,520px) minmax(0,1fr);align-items:end">
+    <div class="wrap g2 g2--split" style="--l:.8fr;align-items:end">
       <div class="tile tile--4x5 rv" style="border-radius:10px"><img src="/assets/img/about.jpg" width="1200" height="1600" alt="Azu in the studio, hands behind his head, headphones around his neck" loading="eager" fetchpriority="high" /></div>
       <div class="stack stack--lg rv">
         <p class="mono eyebrow">The story so far</p>
@@ -29,7 +29,7 @@ const jsonld = { "@context": "https://schema.org", "@type": "Person", name: site
   </section>
 
   <section class="sec paper" id="words">
-    <div class="wrap" style="display:grid;grid-template-columns:minmax(0,280px) minmax(0,640px);gap:clamp(32px,6vw,80px);justify-content:center">
+    <div class="wrap essay">
       <div class="stack sticky" style="align-self:start">
         <p class="mono eyebrow">01 — In my words</p>
         <span class="ser" style="font-size:clamp(24px,2.4vw,32px);line-height:1.15;color:var(--paper-mute)">Music found me early.</span>
@@ -44,7 +44,7 @@ const jsonld = { "@context": "https://schema.org", "@type": "Person", name: site
   </section>
 
   <section class="sec" id="chapters">
-    <div class="wrap g2" style="grid-template-columns:minmax(0,1fr) minmax(0,420px)">
+    <div class="wrap g2 g2--split" style="--r:.6fr">
       <div class="stack stack--lg">
         <div class="sec-head rv" style="margin:0"><div class="sec-head__t"><p class="mono eyebrow">02 — Chapters</p><h2 class="disp h2">So far</h2></div></div>
         <div class="rows rv">
@@ -63,7 +63,7 @@ const jsonld = { "@context": "https://schema.org", "@type": "Person", name: site
   </section>
 
   <section class="sec dim" id="call">
-    <div class="wrap g2" style="grid-template-columns:minmax(0,1fr) minmax(0,520px)">
+    <div class="wrap g2 g2--split" style="--r:.85fr">
       <div class="stack stack--lg sticky rv">
         <p class="mono eyebrow">03 — A call with Azu</p>
         <h2 class="disp h2">Fifteen minutes, <span class="ser">just us</span></h2>
@@ -88,7 +88,7 @@ const jsonld = { "@context": "https://schema.org", "@type": "Person", name: site
         </div>
       </div>
       <div class="stack rv">
-        <div class="g3" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:14px">
+        <div class="g3 g3--two">
           <div class="tile tile--3x4"><img src="/assets/img/about.jpg" width="1200" height="1600" alt="Press photo: Azu in the studio" loading="lazy" /></div>
           <div class="tile tile--3x4"><img src="/assets/img/hero.jpg" width="2000" height="1126" alt="Press photo: Azu on a red velvet couch" loading="lazy" /></div>
         </div>
