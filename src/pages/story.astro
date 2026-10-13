@@ -1,0 +1,105 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import JoinForm from "../components/JoinForm.astro";
+import ApplyForm from "../components/ApplyForm.astro";
+import { site, socials, spotify } from "../data/site";
+
+const songs = await getCollection("songs");
+const books = await getCollection("books");
+const videos = await getCollection("videos");
+const jsonld = { "@context": "https://schema.org", "@type": "Person", name: site.name, jobTitle: "Singer, songwriter, producer", nationality: "Tanzanian", url: `${site.url}/story`, image: `${site.url}/assets/img/about.jpg`, email: site.email, sameAs: [...socials.map((s) => s.url), spotify] };
+---
+<Base title="Story — Azu" description="Hi, I'm Azu. A Tanzanian singer, songwriter, producer and builder of the sound, the visuals and the world around my gift. This is the story so far." image="/assets/img/about.jpg" ogType="profile" jsonld={jsonld}>
+  <section class="sec" id="top">
+    <div class="wrap g2" style="grid-template-columns:minmax(0,520px) minmax(0,1fr);align-items:end">
+      <div class="tile tile--4x5 rv" style="border-radius:10px"><img src="/assets/img/about.jpg" width="1200" height="1600" alt="Azu in the studio, hands behind his head, headphones around his neck" loading="eager" fetchpriority="high" /></div>
+      <div class="stack stack--lg rv">
+        <p class="mono eyebrow">The story so far</p>
+        <h1 class="disp h1">Hi, <span class="ser">I'm Azu.</span></h1>
+        <p class="lede" style="color:var(--bone);font-size:clamp(18px,1.7vw,22px);max-width:46ch">I'm a Tanzanian singer, songwriter, producer and builder of the sound, the visuals and the world around my gift.</p>
+        <div class="facts">
+          <div><span class="mono">Sings in</span><span>Swahili</span></div>
+          <div><span class="mono">Based in</span><span>{site.city}</span></div>
+          <div><span class="mono">Released</span><span>{songs.length} songs · {books.length} books · {videos.length} films</span></div>
+          <div><span class="mono">On the skin</span><span class="ser" style="color:var(--accent);font-size:20px">Jiamini.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec paper" id="words">
+    <div class="wrap" style="display:grid;grid-template-columns:minmax(0,280px) minmax(0,640px);gap:clamp(32px,6vw,80px);justify-content:center">
+      <div class="stack sticky" style="align-self:start">
+        <p class="mono eyebrow">01 — In my words</p>
+        <span class="ser" style="font-size:clamp(24px,2.4vw,32px);line-height:1.15;color:var(--paper-mute)">Music found me early.</span>
+      </div>
+      <div class="stack" style="gap:28px;font-size:clamp(17px,1.5vw,20px);line-height:1.65">
+        <p class="dropcap rv" style="margin:0">Music found me early. The studio my mother made room for became the one place that made sense. I wrote songs in my head, sketched characters and imagined whole worlds long before I knew how to build them.</p>
+        <p class="rv" style="margin:0">With support from my family, I was privileged to go to the United States to study music, and it taught me that a gift isn't the same as being ready. So I kept learning, one skill at a time: production, visuals and everything in between.</p>
+        <blockquote class="rv">There were seasons when letting go would have been easier. I've watched years of work disappear overnight and had to start again from nothing.</blockquote>
+        <p class="rv" style="margin:0">Every time, faith brought me back. At the edge of quitting, I chose music and made a permanent reminder with one word on my skin: <strong>JIAMINI</strong>, believe in yourself. I came home to Tanzania to build with time and intention, and the rest is history.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="chapters">
+    <div class="wrap g2" style="grid-template-columns:minmax(0,1fr) minmax(0,420px)">
+      <div class="stack stack--lg">
+        <div class="sec-head rv" style="margin:0"><div class="sec-head__t"><p class="mono eyebrow">02 — Chapters</p><h2 class="disp h2">So far</h2></div></div>
+        <div class="rows rv">
+          <div class="row"><span class="row__date" style="color:var(--accent)">01</span><div class="stack" style="gap:6px"><span class="h3">The room my mother made</span><span class="row__meta">A corner of a house became a studio. The first songs were written in his head before he could record them.</span></div><span></span></div>
+          <div class="row"><span class="row__date" style="color:var(--accent)">02</span><div class="stack" style="gap:6px"><span class="h3">The United States</span><span class="row__meta">Music school, and the lesson that a gift is not the same as being ready.</span></div><span></span></div>
+          <div class="row"><span class="row__date" style="color:var(--accent)">03</span><div class="stack" style="gap:6px"><span class="h3">Starting again</span><span class="row__meta">Years of work gone overnight. Then the word on the arm: Jiamini.</span></div><span></span></div>
+          <div class="row"><span class="row__date" style="color:var(--accent)">04</span><div class="stack" style="gap:6px"><span class="h3">Home</span><span class="row__meta">Back to Tanzania to build with time and intention. Siku, Wote, Juzi — and {books.length} books.</span></div><a class="btn btn--sm" href="/music">The music →</a></div>
+        </div>
+      </div>
+      <div class="bento sticky rv" style="grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:200px;gap:14px">
+        <div class="span2"><img src="/assets/img/hero.jpg" width="2000" height="1126" alt="Azu on a red velvet couch, smiling" loading="lazy" /></div>
+        <div><img src="/assets/img/walls.jpg" width="1344" height="768" alt="" loading="lazy" /></div>
+        <div class="cell cell--acc"><span class="mono" style="opacity:.75">Ink</span><span class="ser" style="font-size:36px;line-height:1">Jiamini.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec dim" id="call">
+    <div class="wrap g2" style="grid-template-columns:minmax(0,1fr) minmax(0,520px)">
+      <div class="stack stack--lg sticky rv">
+        <p class="mono eyebrow">03 — A call with Azu</p>
+        <h2 class="disp h2">Fifteen minutes, <span class="ser">just us</span></h2>
+        <p class="lede">Tell me a little about you. Calls are chosen by application, and I read every one. No agenda — tell me what a song did for you, ask me anything, or just say hi.</p>
+        <div class="chips"><span class="pill">WhatsApp</span><span class="pill">By application only</span></div>
+      </div>
+      <div class="card rv" style="padding:clamp(24px,3vw,36px)"><ApplyForm /></div>
+    </div>
+  </section>
+
+  <section class="sec" id="press">
+    <div class="wrap g2">
+      <div class="stack stack--lg rv">
+        <p class="mono eyebrow">04 — Press &amp; bookings</p>
+        <h2 class="disp h2">Everything <span class="ser">you need</span></h2>
+        <p class="lede">Approved photos, the bio in three lengths, and a human on the other end of the email.</p>
+        <div class="cta-row"><a class="btn btn--acc" href={`mailto:${site.email}?subject=Press%20kit%20request`}>Request the press kit</a><a class="btn" href={`mailto:${site.email}?subject=Booking%20enquiry`}>Email bookings</a></div>
+        <div class="rows">
+          <div class="kv"><span>Bookings &amp; press</span><a href={`mailto:${site.email}`}>{site.email}</a></div>
+          {socials.slice(0, 2).map((s) => <div class="kv"><span>{s.name}</span><a href={s.url} target="_blank" rel="noopener">@chiefazu</a></div>)}
+          <div class="kv"><span>Label</span><span>Independent</span></div>
+        </div>
+      </div>
+      <div class="stack rv">
+        <div class="g3" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:14px">
+          <div class="tile tile--3x4"><img src="/assets/img/about.jpg" width="1200" height="1600" alt="Press photo: Azu in the studio" loading="lazy" /></div>
+          <div class="tile tile--3x4"><img src="/assets/img/hero.jpg" width="2000" height="1126" alt="Press photo: Azu on a red velvet couch" loading="lazy" /></div>
+        </div>
+        <div class="card">
+          <span class="mono" style="color:var(--mute)">Short bio · 50 words</span>
+          <p class="lede" style="font-size:15px">Azu is a Tanzanian singer, songwriter and producer from Dar es Salaam. Writing in Swahili and producing everything himself, he pairs each release with a free illustrated book telling the story behind the song — the Walls of Azu. His latest, the lyric video for <em>Juzi</em>, is out now.</p>
+          <div class="chips"><span class="pill pill--acc">50</span><span class="pill pill--mute">150 — on request</span><span class="pill pill--mute">400 — on request</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <JoinForm heading="Stay" italic="close." copy="New music, videos and the occasional voice note from the studio. One message a month." />
+</Base>

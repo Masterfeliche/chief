@@ -1,0 +1,12 @@
+[
+  { "id": "juzi", "title": "Juzi", "note": "lyric video", "video": "juzi", "latest": true },
+  { "id": "forgive-and-forget", "title": "Forgive & Forget", "book": "forgive-and-forget" },
+  { "id": "confession-pt-2", "title": "Confession Pt 2", "book": "confession-pt-2" },
+  { "id": "jumatatu", "title": "Jumatatu", "book": "jumatatu" },
+  { "id": "sana", "title": "Sana", "book": "sana" },
+  { "id": "samsons-nephew", "title": "Samson's Nephew", "book": "samsons-nephew" },
+  { "id": "2-of-us", "title": "2 of Us", "book": "2-of-us" },
+  { "id": "pacha", "title": "Pacha", "book": "pacha" },
+  { "id": "wote", "title": "Wote", "note": "music video", "video": "wote" },
+  { "id": "siku", "title": "Siku", "note": "music video", "video": "siku", "book": "siku" }
+]

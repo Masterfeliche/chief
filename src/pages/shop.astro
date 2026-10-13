@@ -1,0 +1,73 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import SectionHead from "../components/SectionHead.astro";
+
+const products = await getCollection("products");
+const live = products.filter((p) => !p.data.soon);
+---
+<Base title="Shop — Azu" description="Official Azu merch — coming soon. Join the list to hear when the first drop lands." theme="paper">
+  <section class="sec" id="top">
+    <div class="wrap g2" style="align-items:end">
+      <div class="stack stack--lg">
+        <p class="mono eyebrow">Official merch · made in Dar es Salaam</p>
+        <h1 class="disp h1">Wear the <span class="ser">music</span></h1>
+      </div>
+      <div class="stack">
+        <p class="lede" style="color:var(--paper-ink);font-size:clamp(17px,1.5vw,20px)">{live.length ? "Small runs, printed by hand, every piece shipped with a lyric card." : "The first drop is being made now — small runs, printed by hand, every piece shipped with a lyric card. Nothing here will be made to be thrown away."}</p>
+        <div class="cta-row"><a class="btn btn--ink" href="#notify">{live.length ? "Shop the drop" : "Tell me when it drops"}</a><a class="btn btn--paper" href="/walls">Meanwhile, the books are free</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0" id="coming">
+    <div class="wrap">
+      <SectionHead eyebrow={live.length ? "01 — Everything" : "01 — First drop"} heading={live.length ? "In the shop" : "What's"} italic={live.length ? undefined : "coming"}>
+        <span class="mono m">{live.length ? `Showing ${products.length}` : "Prices announced at launch"}</span>
+      </SectionHead>
+      <div class="g4">
+        {products.map((p) => {
+          const d = p.data;
+          const Tag = d.url ? "a" : "article";
+          return (
+            <Tag class="prod rv" href={d.url} target={d.url ? "_blank" : undefined} rel={d.url ? "noopener" : undefined}>
+              <div class="tile tile--4x5">
+                <img src={d.image} width="1080" height="1440" alt={d.soon ? "" : d.title} loading="lazy" style={d.soon ? "opacity:.25;filter:grayscale(1)" : undefined} />
+                {(d.badge || d.soon) && <span class="pill pill--ink" style="position:absolute;top:14px;right:14px">{d.badge ?? "Soon"}</span>}
+              </div>
+              <div class="prod__foot">
+                <div class="stack" style="gap:4px"><span class="h3" style="font-size:20px">{d.title}</span><span class="prod__meta">{d.meta}</span></div>
+                <span class="mono m">{d.price ?? "TBA"}</span>
+              </div>
+            </Tag>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="background:var(--ink);color:var(--bone)" id="notify">
+    <div class="wrap g2 g2--c">
+      <div class="stack rv">
+        <p class="mono" style="color:var(--accent)">02 — Notify me</p>
+        <h2 class="disp h2" style="color:var(--bone)">Be first <span class="ser" style="color:var(--bone-2)">in line.</span></h2>
+        <p class="lede" style="color:var(--bone-2)">Small runs sell out. The list gets 24 hours before the shop opens to everyone.</p>
+      </div>
+      <form class="stack rv" data-form data-subject="Shop waitlist — chiefazu.com" action="#" method="post" style="border:1px solid var(--line);border-radius:10px;padding:clamp(20px,3vw,32px)">
+        <p class="sr-only" aria-hidden="true"><label>Leave this empty <input name="company" tabindex="-1" autocomplete="off" /></label></p>
+        <div class="field"><label for="shop-contact">Email or WhatsApp number</label><input id="shop-contact" name="contact" type="text" placeholder="you@example.com  ·  +255 …" required /></div>
+        <div class="field"><label for="shop-size">Tee size <em style="color:var(--mute);text-transform:none;letter-spacing:0">optional</em></label><input id="shop-size" name="size" type="text" placeholder="S · M · L · XL · XXL" /></div>
+        <button class="btn btn--acc" type="submit" style="height:56px">Notify me</button>
+        <p class="form-note" data-note>Unsubscribe any time. We never share your details.</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:clamp(64px,8vw,100px)">
+    <div class="wrap g3">
+      <div class="card rv"><span class="mono eyebrow">Made here</span><span class="h3">Printed by hand in Dar es Salaam</span><p class="lede" style="font-size:15px">Small runs. If the colour is slightly off from the photo, that's the hand.</p></div>
+      <div class="card rv"><span class="mono eyebrow">Shipping</span><span class="h3">Tanzania, East Africa, worldwide</span><p class="lede" style="font-size:15px">Local delivery in Dar, courier across the region, tracked post everywhere else.</p></div>
+      <div class="card rv"><span class="mono eyebrow">Payment</span><span class="h3">M-Pesa, Tigo Pesa, card</span><p class="lede" style="font-size:15px">Mobile money first, because that's where we are. Cards and PayPal for everywhere else.</p></div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,19 @@
+---
+import type { CollectionEntry } from "astro:content";
+/* A video tile with a solid caption band. `wide` = 21:9 spanning the grid. */
+interface Props { video: CollectionEntry<"videos">; href?: string; wide?: boolean; cta?: string; play?: boolean; id?: string; class?: string }
+const { video, href, wide = false, cta, play = false, id, class: cls = "" } = Astro.props;
+const v = video.data;
+const link = href ?? v.url;
+const external = /^https?:/.test(link);
+---
+<a class:list={["clip", wide ? "clip--wide" : "clip--std", "rv", cls]} href={link} id={id} target={external ? "_blank" : undefined} rel={external ? "noopener" : undefined}>
+  <video muted playsinline preload="none" poster={v.poster} data-seq={v.seq.join(",")} aria-hidden="true"></video>
+  {play && <span class="play" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M3 1.5v9l7-4.5z" fill="currentColor"/></svg></span>}
+  <span class="clip__band">
+    <span class="stack" style="gap:6px"><span class="mono eyebrow">{v.kind}</span><span class="h3">{v.title}</span></span>
+    {cta
+      ? <span class="btn btn--acc btn--sm"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1.5v9l8-4.5z" fill="currentColor"/></svg>{cta}</span>
+      : <span class="mono">Watch ↗</span>}
+  </span>
+</a>

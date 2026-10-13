@@ -1,0 +1,59 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import Clip from "../components/Clip.astro";
+import SectionHead from "../components/SectionHead.astro";
+import JoinForm from "../components/JoinForm.astro";
+import { youtube } from "../data/site";
+
+const videos = await getCollection("videos");
+const featured = videos.find((v) => v.data.featured) ?? videos[0];
+const others = videos.filter((v) => v.id !== featured.id);
+const f = featured.data;
+---
+<Base title="Watch — Azu" description="Azu's videos: the Juzi lyric video, and the Siku and Wote music videos. Watch here or on YouTube." image={f.poster}>
+  <section id={featured.id} style="position:relative">
+    <div class="clip clip--wide" style="border-radius:0;aspect-ratio:21/9;max-height:760px;min-height:420px">
+      <video muted playsinline preload="none" poster={f.poster} data-seq={f.seq.join(",")} aria-hidden="true"></video>
+      <a class="play play--lg" href={f.url} target="_blank" rel="noopener" aria-label={`Watch ${f.title} on YouTube`}><svg viewBox="0 0 12 12"><path d="M3 1.5v9l7-4.5z" fill="currentColor"/></svg></a>
+      <div class="clip__band" style="padding:clamp(24px,4vw,48px) var(--gutter);background:linear-gradient(0deg,var(--ink) 0%,rgba(11,10,9,.7) 70%,rgba(11,10,9,0) 100%);border-top:0;backdrop-filter:none">
+        <div class="wrap" style="display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;width:100%;padding:0">
+          <div class="stack" style="gap:12px">
+            <div class="chips"><span class="pill pill--acc">New</span><span class="pill">{f.kind}</span></div>
+            <h1 class="disp h1" style="font-size:clamp(56px,9vw,120px)">{f.title} <span class="ser">the film</span></h1>
+          </div>
+          <div class="cta-row"><a class="btn btn--acc" href={f.url} target="_blank" rel="noopener">Watch on YouTube ↗</a><a class="btn" href="/music">Stream the song</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <SectionHead eyebrow="01 — All videos" heading="The films"><a class="btn btn--sm" href={youtube} target="_blank" rel="noopener">Subscribe on YouTube ↗</a></SectionHead>
+      <div class="clips">
+        {others.map((v) => <Clip video={v} id={v.id} play />)}
+        <Clip video={featured} play />
+        <div class="card rv" style="justify-content:space-between;aspect-ratio:16/9">
+          <span class="mono" style="color:var(--mute)">Next</span>
+          <div class="stack" style="gap:8px"><span class="h3">More films are coming.</span><p class="lede" style="font-size:15px">Every video premieres on the list a day before YouTube.</p></div>
+          <a class="btn btn--acc" href="#join" style="align-self:flex-start">Get the premiere</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec dim">
+    <div class="wrap g2 g2--c">
+      <div class="stack stack--lg rv">
+        <p class="mono eyebrow">02 — Behind the films</p>
+        <h2 class="disp h2">Sound, pictures, <span class="ser">world</span></h2>
+        <p class="lede">Azu builds the visuals the same way he builds the songs — at home, one skill at a time. The characters in the videos were sketched years before the cameras arrived.</p>
+        <a class="btn" href="/story" style="align-self:flex-start">Read the story</a>
+      </div>
+      <div class="tile tile--4x3 rv"><img src="/assets/img/walls.jpg" width="1344" height="768" alt="" loading="lazy" /></div>
+    </div>
+  </section>
+
+  <JoinForm eyebrow="03 — Join" heading="Watch it" italic="first." copy="Every video premieres on the list a day before YouTube. One message a drop." button="Join" />
+</Base>

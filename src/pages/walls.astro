@@ -1,0 +1,82 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import BookCard from "../components/BookCard.astro";
+import SectionHead from "../components/SectionHead.astro";
+import JoinForm from "../components/JoinForm.astro";
+import { site, spotify, walls } from "../data/site";
+
+const books = (await getCollection("books")).sort((a, b) => b.data.no.localeCompare(a.data.no)); // newest first
+const newest = books[0];
+const n = newest.data;
+const count = String(books.length).padStart(2, "0");
+const jsonld = { "@context": "https://schema.org", "@type": "CollectionPage", name: "Walls of Azu", url: `${site.url}/walls`, description: `${books.length} short illustrated books by Azu, one per song, free in PDF and EPUB.`, author: { "@type": "MusicGroup", name: site.name } };
+---
+<Base title="Walls of Azu — the library" description="Every song has a story. Eight short illustrated books by Azu, free to read online or download as PDF and EPUB." image="/assets/img/walls.jpg" jsonld={jsonld}>
+  <section class="sec" id="top" style="padding-bottom:clamp(40px,5vw,72px)">
+    <div class="wrap">
+      <div class="g2" style="align-items:end">
+        <div class="stack stack--lg">
+          <p class="mono eyebrow">The library · {count} stories · all free</p>
+          <h1 class="disp h1">Every song <span class="ser">has a story.</span></h1>
+        </div>
+        <div class="stack">
+          <p class="lede" style="color:var(--bone)">A short illustrated book behind every song — where it was written, who it's for, what it cost. Read online at wallsofazu.com, or take them with you as PDF and EPUB. No sign-up, no paywall. <span class="ser" style="color:var(--accent);font-size:1.15em">Karibu.</span></p>
+          <div class="cta-row"><a class="btn btn--acc" href="#shelf">Browse the shelf</a><a class="btn" href={walls} target="_blank" rel="noopener">Read online ↗</a></div>
+        </div>
+      </div>
+      <div class="sec-head" style="border-top:1px solid var(--line);padding-top:24px;margin:40px 0 0">
+        <div class="chips" role="group" aria-label="Filter"><span class="chip" aria-pressed="true">All · {count}</span><span class="chip">Newest</span><span class="chip">A–Z</span></div>
+        <div class="chips"><span class="mono" style="color:var(--mute);align-self:center">Read in</span><span class="pill pill--acc">SW</span><span class="pill">EN</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec dim" id={newest.id}>
+    <div class="wrap g2 g2--c" style="grid-template-columns:minmax(0,420px) minmax(0,1fr)">
+      <div class="book rv" style="flex:none;position:relative">
+        <a class="book__cover" href={n.read ?? `${walls}/${n.id}/`} target="_blank" rel="noopener"><img src={n.cover ?? `/assets/img/book-${n.id}.jpg`} width="1080" height="1440" alt={`${n.title} — book cover`} loading="lazy" /></a>
+        <span class="pill pill--acc" style="position:absolute;top:-14px;left:24px">Newest</span>
+      </div>
+      <div class="stack stack--lg rv">
+        <div class="stack">
+          <p class="mono eyebrow">Story #{n.no}</p>
+          <h2 class="disp h2">{n.title}</h2>
+          <p class="lede">The newest book in the series. Open it on Walls of Azu, or download it and read it anywhere.</p>
+        </div>
+        <div class="facts">
+          <div><span class="mono">Format</span><span>Illustrated · short read</span></div>
+          <div><span class="mono">Languages</span><span>Swahili · English</span></div>
+          <div><span class="mono">Listen while reading</span><a href={spotify} target="_blank" rel="noopener" style="color:var(--accent)">Play {n.title} ↗</a></div>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn--acc" href={n.read ?? `${walls}/${n.id}/`} target="_blank" rel="noopener">Read online ↗</a>
+          <a class="btn" href={n.pdf ?? `/assets/books/${n.id}.pdf`} download>PDF</a>
+          <a class="btn" href={n.epub ?? `/assets/books/${n.id}.epub`} download>EPUB</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="shelf">
+    <div class="wrap">
+      <SectionHead eyebrow="01 — The shelf" heading={`All ${books.length === 8 ? "eight" : books.length}`}><span class="mono" style="color:var(--mute)">Newest first</span></SectionHead>
+      <div class="books-grid">
+        {books.map((b) => <BookCard book={b} class="rv" anchor={b.id !== newest.id} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec dim">
+    <div class="wrap">
+      <SectionHead eyebrow="02 — How a story gets made" heading="Song first," italic="then the book" />
+      <div class="g3">
+        <div class="card rv" style="min-height:260px;justify-content:space-between"><span class="disp" style="font-size:64px;color:var(--accent)">01</span><div class="stack" style="gap:8px"><span class="h3">The song</span><p class="lede" style="font-size:15px">Every book starts with a finished track. The story is what the song could not say in three minutes.</p></div></div>
+        <div class="card rv" style="min-height:260px;justify-content:space-between"><span class="disp" style="font-size:64px;color:var(--accent)">02</span><div class="stack" style="gap:8px"><span class="h3">Written twice</span><p class="lede" style="font-size:15px">In Swahili first, then in English — rewritten, not translated. Some things only exist in one of them.</p></div></div>
+        <div class="card rv" style="min-height:260px;justify-content:space-between"><span class="disp" style="font-size:64px;color:var(--accent)">03</span><div class="stack" style="gap:8px"><span class="h3">Drawn</span><p class="lede" style="font-size:15px">Illustrated so the shelf looks like one world. The characters were sketched long before the songs existed.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <JoinForm heading="New story," italic="new message." copy="Each book lands in your inbox the day it's finished — before it goes on the shelf." button="Send me the next one" />
+</Base>

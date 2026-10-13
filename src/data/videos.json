@@ -1,0 +1,27 @@
+[
+  {
+    "id": "juzi",
+    "title": "Juzi",
+    "kind": "Lyric video",
+    "poster": "/assets/video/juzi.jpg",
+    "seq": ["/assets/video/juzi.mp4", "/assets/video/juzi-2.mp4", "/assets/video/juzi-3.mp4"],
+    "url": "https://www.youtube.com/@Chiefazu",
+    "featured": true
+  },
+  {
+    "id": "siku",
+    "title": "Siku",
+    "kind": "Music video",
+    "poster": "/assets/video/siku.jpg",
+    "seq": ["/assets/video/siku.mp4"],
+    "url": "https://www.youtube.com/@Chiefazu"
+  },
+  {
+    "id": "wote",
+    "title": "Wote",
+    "kind": "Music video",
+    "poster": "/assets/video/wote.jpg",
+    "seq": ["/assets/video/wote.mp4"],
+    "url": "https://www.youtube.com/@Chiefazu"
+  }
+]

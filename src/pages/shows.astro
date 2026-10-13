@@ -1,0 +1,89 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import SectionHead from "../components/SectionHead.astro";
+import JoinForm from "../components/JoinForm.astro";
+import { site } from "../data/site";
+
+const today = new Date().toISOString().slice(0, 10);
+const all = (await getCollection("shows")).sort((a, b) => a.data.date.localeCompare(b.data.date));
+const upcoming = all.filter((s) => s.data.date >= today);
+const past = all.filter((s) => s.data.date < today).reverse();
+const fmt = (iso: string) => {
+  const d = new Date(iso + "T00:00:00");
+  return { day: String(d.getDate()).padStart(2, "0"), mon: d.toLocaleString("en", { month: "short" }) };
+};
+const pill: Record<string, [string, string]> = {
+  presale: ["pill--acc", "Presale"], onsale: ["", "On sale"], soldout: ["pill--mute", "Sold out"], waitlist: ["", "Waitlist"],
+};
+---
+<Base title="Shows — Azu" description="Azu live. Tour dates, presale access and bookings.">
+  <section class="sec" id="top" style="padding-bottom:clamp(40px,5vw,72px)">
+    <div class="wrap g2" style="align-items:end">
+      <div class="stack stack--lg">
+        <p class="mono eyebrow">Live</p>
+        <h1 class="disp h1">On the <span class="ser">road</span></h1>
+        <p class="lede" style="color:var(--bone)">When Azu plays, the dates land here first — and the presale goes to the mailing list 48 hours before anyone else.</p>
+        <div class="cta-row"><a class="btn btn--acc" href="#presale">Get presale access</a><a class="btn" href="#bookings">Book Azu</a></div>
+      </div>
+      <div class="tile tile--4x3 rv"><img src="/assets/img/hero.jpg" width="2000" height="1126" alt="Azu on a red velvet couch" loading="lazy" /></div>
+    </div>
+  </section>
+
+  <section class="sec" id="dates" style="padding-top:0">
+    <div class="wrap">
+      <SectionHead eyebrow="01 — Dates" heading="Upcoming">
+        <div class="chips"><span class="pill pill--acc">Upcoming · {String(upcoming.length).padStart(2, "0")}</span><span class="pill pill--mute">Past · {String(past.length).padStart(2, "0")}</span></div>
+      </SectionHead>
+      <div class="rows rv">
+        {upcoming.length === 0 ? (
+          <div class="empty">
+            <span class="mono eyebrow">No dates announced yet</span>
+            <span class="h3">The next show goes to the list first.</span>
+            <p class="lede" style="font-size:15px;max-width:52ch">Join below and you'll get the date, the city and a presale code before it's public anywhere else.</p>
+            <a class="btn btn--acc" href="#presale">Tell me first</a>
+          </div>
+        ) : upcoming.map((s) => {
+          const d = fmt(s.data.date); const [cls, label] = pill[s.data.status];
+          return (
+            <div class="row">
+              <span class="row__date">{d.day}<span class="ser">{d.mon}</span></span>
+              <div class="stack" style="gap:4px"><span class="h3">{s.data.city}</span><span class="row__meta">{s.data.venue}{s.data.meta && ` · ${s.data.meta}`}</span></div>
+              <div class="row__end">
+                <span class:list={["pill", cls]}>{label}</span>
+                {s.data.status === "soldout"
+                  ? <a class="btn btn--sm" href="#presale">Join waitlist</a>
+                  : s.data.tickets && <a class="btn btn--sm btn--acc" href={s.data.tickets} target="_blank" rel="noopener">Tickets</a>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {past.length > 0 && (
+        <div class="stack" style="margin-top:48px">
+          <span class="mono" style="color:var(--mute)">Past shows</span>
+          <div class="rows">{past.map((s) => { const d = fmt(s.data.date); return <div class="kv"><span>{d.day} {d.mon} {s.data.date.slice(0, 4)}</span><span>{s.data.city} · {s.data.venue}</span></div>; })}</div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <JoinForm id="presale" eyebrow="02 — Presale" heading="48 hours" italic="early." copy="Every show goes to the list first. Tell us your city and we'll send the code the morning presale opens." button="Send my code" subject="Presale list — chiefazu.com" city />
+
+  <section class="sec paper" id="bookings">
+    <div class="wrap g2 g2--c">
+      <div class="stack stack--lg rv">
+        <p class="mono eyebrow">03 — Bookings</p>
+        <h2 class="disp h2">Bring Azu <span class="ser">to your city</span></h2>
+        <p class="lede">Festivals, venues, private events and brand shows. Everything you need — rider, stage plot, press photos — is one email away.</p>
+        <div class="cta-row"><a class="btn btn--ink" href={`mailto:${site.email}?subject=Booking%20enquiry`}>Email bookings</a><a class="btn" href="/story#press">Press &amp; bio</a></div>
+      </div>
+      <div class="g3 rv" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:14px">
+        <div class="card"><span class="mono m">Based in</span><span class="disp" style="font-size:clamp(26px,2.6vw,36px)">{site.city}</span></div>
+        <div class="card"><span class="mono m">Travels</span><span class="disp" style="font-size:clamp(26px,2.6vw,36px)">Worldwide</span></div>
+        <div class="card"><span class="mono m">Formats</span><span class="disp" style="font-size:clamp(26px,2.6vw,36px)">Band · Solo</span></div>
+        <div class="card"><span class="mono m">Contact</span><a class="disp" style="font-size:clamp(18px,1.8vw,22px);text-transform:none;word-break:break-all" href={`mailto:${site.email}`}>{site.email}</a></div>
+      </div>
+    </div>
+  </section>
+</Base>

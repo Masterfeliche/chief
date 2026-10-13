@@ -1,0 +1,189 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import Clip from "../components/Clip.astro";
+import BookCard from "../components/BookCard.astro";
+import PlatformList from "../components/PlatformList.astro";
+import SectionHead from "../components/SectionHead.astro";
+import JoinForm from "../components/JoinForm.astro";
+import ApplyForm from "../components/ApplyForm.astro";
+import { site, platforms, spotify } from "../data/site";
+
+const books = (await getCollection("books")).sort((a, b) => a.data.no.localeCompare(b.data.no));
+const videos = await getCollection("videos");
+const featured = videos.find((v) => v.data.featured) ?? videos[0];
+const others = videos.filter((v) => v.id !== featured.id);
+
+const jsonld = {
+  "@context": "https://schema.org",
+  "@type": "MusicGroup",
+  name: site.name,
+  url: site.url,
+  image: `${site.url}/assets/img/og.jpg`,
+  email: site.email,
+  foundingLocation: "Tanzania",
+  genre: "Swahili",
+  sameAs: [...platforms.map((p) => p.url), "https://www.instagram.com/chiefazu", "https://www.tiktok.com/@chiefazu"],
+};
+---
+<Base title="Azu — Official Site" description="Swahili music has never sounded sweeter. Azu is a Tanzanian singer, songwriter and producer. Watch the videos, stream everywhere, and read the story behind every song — free." jsonld={jsonld}>
+  <Fragment slot="head">
+    <link rel="preload" as="image" href="/assets/img/hero.jpg" media="(min-width: 761px)" />
+    <link rel="preload" as="image" href="/assets/img/hero-m.jpg" media="(max-width: 760px)" />
+  </Fragment>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="top">
+    <h1 class="disp hero__name" aria-label="Azu">AZU</h1>
+    <span class="mono hero__vert hero__vert--l">Dar es Salaam · Tanzania</span>
+    <span class="mono hero__vert hero__vert--r">Singer · Songwriter · Producer</span>
+    <div class="hero__photo">
+      <picture>
+        <source media="(max-width: 760px)" srcset="/assets/img/hero-m.jpg" />
+        <img src="/assets/img/hero.jpg" width="2000" height="1126" alt="Azu sitting on a red velvet couch, smiling, in a white cap and grey coat" fetchpriority="high" />
+      </picture>
+    </div>
+    <span class="ser hero__word" aria-hidden="true">karibu</span>
+    <a class="hero__sticker" href="/watch">
+      <span class="mono" style="opacity:.8">{featured.data.kind}</span>
+      <span class="disp">{featured.data.title}</span>
+      <span class="mono">Out now ↗</span>
+    </a>
+    <div class="wrap hero__foot">
+      <div class="hero__copy">
+        <p class="mono eyebrow">Singer · Songwriter · Producer</p>
+        <p class="lede">{site.tagline}</p>
+      </div>
+      <div class="hero__cta">
+        <a class="btn btn--acc" href={spotify} target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1.5v9l8-4.5z" fill="currentColor"/></svg>
+          Listen
+        </a>
+        <a class="btn" href="/walls">Read the story <span class="tag">Free</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TICKER ===== -->
+  <div class="tickwrap" aria-hidden="true">
+    <div class="tick">
+      {[0, 1].map(() => (
+        <>
+          <span class="disp">Juzi</span><span class="ser">lyric video, out now</span><span class="disp">✦</span>
+          <span class="disp">Siku · Wote</span><span class="ser">music videos</span><span class="disp">✦</span>
+          <span class="disp">Walls of Azu</span><span class="ser">eight stories, free to read</span><span class="disp">✦</span>
+        </>
+      ))}
+    </div>
+  </div>
+
+  <!-- ===== LATEST ===== -->
+  <section class="sec" id="latest">
+    <div class="wrap g2 g2--c">
+      <Clip video={featured} href="/watch" play />
+      <div class="stack stack--lg rv">
+        <div class="stack">
+          <p class="mono eyebrow">01 — Latest</p>
+          <h2 class="disp h2">{featured.data.title}</h2>
+          <p class="ser sub">(adv.) the other day — not long ago at all</p>
+          <p class="lede">The new lyric video. Written, produced and sung by Azu. Stream it everywhere, or watch it first.</p>
+        </div>
+        <PlatformList />
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WATCH ===== -->
+  <section class="sec dim" id="watch">
+    <div class="wrap">
+      <SectionHead eyebrow="02 — Watch" heading="The films"><a class="btn" href="/watch">All videos ↗</a></SectionHead>
+      <div class="clips">
+        <Clip video={featured} href={`/watch#${featured.id}`} wide cta="Watch" />
+        {others.map((v) => <Clip video={v} href={`/watch#${v.id}`} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FIELD NOTES ===== -->
+  <section class="sec" id="notes">
+    <div class="wrap">
+      <SectionHead eyebrow="03 — Field notes" heading="Who is" italic="Azu?"><a class="btn" href="/story">Read the full story</a></SectionHead>
+      <div class="bento">
+        <div class="span2 row2 rv"><img src="/assets/img/about.jpg" width="1200" height="1600" alt="Azu in the studio, hands behind his head, headphones around his neck" loading="lazy" /></div>
+        <div class="cell cell--acc span2 rv">
+          <span class="mono" style="opacity:.75">On the skin, in ink</span>
+          <span class="quote">“Jiamini.” Believe in yourself. So I cannot forget.</span>
+        </div>
+        <div class="cell rv">
+          <span class="mono" style="color:var(--mute)">Language</span>
+          <span class="stack" style="gap:6px"><span class="big">Swahili</span><span style="font-size:14px;color:var(--bone-2)">The language the songs arrive in.</span></span>
+        </div>
+        <div class="cell rv">
+          <span class="mono" style="color:var(--mute)">Made in</span>
+          <span class="stack" style="gap:6px"><span class="big">Dar es Salaam</span><span style="font-size:14px;color:var(--bone-2)">Sound, visuals and the world around the gift — all built at home.</span></span>
+        </div>
+        <div class="rv"><img src="/assets/img/walls.jpg" width="1344" height="768" alt="" loading="lazy" /></div>
+        <div class="cell rv">
+          <span class="mono" style="color:var(--mute)">Studied in</span>
+          <span class="stack" style="gap:6px"><span class="big">The United States</span><span style="font-size:14px;color:var(--bone-2)">Where a gift learned it wasn't the same as being ready.</span></span>
+        </div>
+        <div class="cell cell--paper span2 rv">
+          <span class="mono" style="color:var(--paper-mute)">The short version</span>
+          <p style="margin:0;font-size:clamp(16px,1.4vw,19px);line-height:1.5;max-width:44ch">Music found me early. The studio my mother made room for became the one place that made sense. I wrote songs in my head, sketched characters and imagined whole worlds long before I knew how to build them.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WALLS OF AZU ===== -->
+  <section class="sec dim" id="walls">
+    <div class="wrap">
+      <SectionHead eyebrow="04 — Walls of Azu" heading="Every song" italic="has a story." max="720px"
+        lede={`A short illustrated book behind every song. I'm blessed I get to share so many. Read them free, in PDF or EPUB. <span class="ser" style="color:var(--accent);font-size:1.15em">Karibu.</span>`}>
+        <a class="btn" href="/walls">Open the library ↗</a>
+      </SectionHead>
+      <div class="shelf rv" data-shelf>
+        <div class="sec-head" style="margin-bottom:20px">
+          <span class="mono" style="color:var(--mute)" data-count>01 / {String(books.length).padStart(2, "0")}</span>
+          <div class="shelf__ctl">
+            <button class="btn btn--sm btn--icon" type="button" data-prev aria-label="Previous book">←</button>
+            <button class="btn btn--sm btn--icon" type="button" data-next aria-label="Next book">→</button>
+          </div>
+        </div>
+        <div class="shelf__track">
+          {books.map((b) => <BookCard book={b} />)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== A CALL WITH AZU ===== -->
+  <section class="sec" id="call">
+    <div class="wrap g2 g2--c">
+      <div class="stack rv">
+        <p class="mono eyebrow">05 — A call with Azu</p>
+        <h2 class="disp h2">Fifteen minutes, <span class="ser">just us</span></h2>
+        <p class="lede">Tell me a little about you. Calls are chosen by application, and I read every one.</p>
+        <div class="chips" style="margin-top:4px"><span class="pill">WhatsApp</span><span class="pill">By application only</span></div>
+      </div>
+      <div class="card rv" style="align-items:flex-start">
+        <span class="mono" style="color:var(--mute)">How it works</span>
+        <div class="rows" style="width:100%">
+          <div class="kv"><span>01</span><span>Apply with your name, age, city and WhatsApp number.</span></div>
+          <div class="kv"><span>02</span><span>If you're chosen, you'll hear from us on WhatsApp.</span></div>
+          <div class="kv"><span>03</span><span>We talk. No agenda.</span></div>
+        </div>
+        <button class="btn btn--acc" type="button" data-open="#apply">Apply for a call</button>
+      </div>
+    </div>
+  </section>
+
+  <JoinForm eyebrow="06 — Join" heading="Hear it" italic="first." copy="New music, videos and the occasional voice note from the studio. One message a month, never more." />
+
+  <dialog class="dlg" id="apply" aria-labelledby="apply-h">
+    <div class="dlg__in">
+      <button class="dlg__x" type="button" data-close aria-label="Close">×</button>
+      <ApplyForm inDialog />
+    </div>
+  </dialog>
+</Base>

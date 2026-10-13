@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { walls } from "../data/site";
+interface Props { book: CollectionEntry<"books">; class?: string; anchor?: boolean }
+const { book, class: cls = "", anchor = false } = Astro.props;
+const b = book.data;
+const cover = b.cover ?? `/assets/img/book-${b.id}.jpg`;
+const pdf = b.pdf ?? `/assets/books/${b.id}.pdf`;
+const epub = b.epub ?? `/assets/books/${b.id}.epub`;
+const read = b.read ?? `${walls}/${b.id}/`;
+---
+<article class:list={["book", cls]} id={anchor ? b.id : undefined}>
+  <a class="book__cover" href={read} target="_blank" rel="noopener" aria-label={`Read ${b.title} on Walls of Azu`}>
+    <img src={cover} width="1080" height="1440" alt={`${b.title} — book cover`} loading="lazy" draggable="false" />
+  </a>
+  <div class="book__foot">
+    <div><span class="mono eyebrow">#{b.no}</span><p class="h3" style="font-size:20px;margin-top:4px">{b.title}</p></div>
+    <div class="book__dl">
+      <a class="btn btn--xs" href={pdf} download>PDF</a>
+      <a class="btn btn--xs" href={epub} download>EPUB</a>
+    </div>
+  </div>
+</article>

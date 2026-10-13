@@ -1,0 +1,29 @@
+---
+/* "A call with Azu" application. Renders inline (Story page) or inside the <dialog> (home). */
+interface Props { inDialog?: boolean }
+const { inDialog = false } = Astro.props;
+const p = inDialog ? "ap" : "call";
+---
+<form data-form data-subject="Call application — chiefazu.com" action="#" method="post" class="stack" style="gap:18px">
+  <p class="sr-only" aria-hidden="true"><label>Leave this empty <input name="company" tabindex="-1" autocomplete="off" /></label></p>
+  {inDialog && (
+    <div class="stack" style="gap:8px">
+      <h2 class="disp h2" id="apply-h">A call with Azu</h2>
+      <p class="lede" style="font-size:15px">Tell me a little about you. Calls are chosen by application.</p>
+    </div>
+  )}
+  <div class="field"><label for={`${p}-name`}>Full name</label><input id={`${p}-name`} name="name" required autocomplete="name" /></div>
+  <div class="field-row">
+    <div class="field"><label for={`${p}-age`}>Age</label><input id={`${p}-age`} name="age" type="number" inputmode="numeric" min="10" max="99" required /></div>
+    <div class="field"><label for={`${p}-loc`}>Location</label><input id={`${p}-loc`} name="location" required autocomplete="address-level2" placeholder="City, country" /></div>
+  </div>
+  <div class="field"><label for={`${p}-wa`}>WhatsApp number</label><input id={`${p}-wa`} name="whatsapp" type="tel" required autocomplete="tel" placeholder="+255 …" /></div>
+  <div class="field"><label for={`${p}-found`}>How did you find Azu? <em style="color:var(--mute)">Optional</em></label><input id={`${p}-found`} name="found_via" placeholder="Instagram, a friend, a song…" /></div>
+  <button class="btn btn--acc" type="submit" style="height:56px;width:100%">Send application</button>
+  <p class="form-note" role="status" aria-live="polite" data-note>If you're selected, you'll hear from us on WhatsApp. Nothing else is done with your number.</p>
+</form>
+<div class="stack" data-done hidden>
+  <h2 class="disp h2" style="font-size:40px">Application sent.</h2>
+  <p class="lede">Asante. If you're selected, you'll hear from us on WhatsApp.</p>
+  {inDialog && <button class="btn" type="button" data-close>Close</button>}
+</div>

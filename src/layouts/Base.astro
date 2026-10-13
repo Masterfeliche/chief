@@ -1,0 +1,96 @@
+---
+import "../styles/global.css";
+import { site, nav, platforms, socials, spotify, walls } from "../data/site";
+import Player from "../components/Player";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  ogType?: string;
+  theme?: "ink" | "paper";
+  jsonld?: Record<string, unknown>;
+}
+const { title, description, image = "/assets/img/og.jpg", ogType = "website", theme = "ink", jsonld } = Astro.props;
+const path = Astro.url.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
+const canonical = new URL(path === "/" ? "/" : path, site.url).href;
+const paper = theme === "paper";
+---
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content={paper ? "#f1ece3" : "#0b0a09"} />
+  <meta property="og:type" content={ogType} />
+  <meta property="og:site_name" content={site.name} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={new URL(image, site.url).href} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/assets/icons/favicon.ico" sizes="48x48" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png" />
+  <link rel="apple-touch-icon" href="/assets/icons/favicon-180.png" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script is:inline>document.documentElement.classList.remove("no-js")</script>
+  {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
+  <slot name="head" />
+</head>
+<body class:list={[paper && "paper"]} style={paper ? "background:var(--paper)" : undefined}>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <div class="bar" style={paper ? "background:var(--ink);color:var(--bone)" : undefined}>
+    <span class="bar__side" style={paper ? "color:var(--mute)" : undefined}>{site.name} · Official</span>
+    <a href={site.announcement.href}>{site.announcement.text} · <strong>{site.announcement.cta}</strong></a>
+    <span class="bar__side" style={paper ? "color:var(--mute)" : undefined}>EN / SW</span>
+  </div>
+
+  <header class="hdr" id="hdr" style={paper ? "background:rgba(241,236,227,.86);border-color:var(--paper-line)" : undefined}>
+    <div class="wrap hdr__in">
+      <a class="logo" href="/" aria-label={`${site.name}, home`}>{site.name}</a>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="nav" style={paper ? "border-color:var(--paper-line)" : undefined}>Menu</button>
+      <nav class="nav" id="nav" aria-label="Main" style={paper ? "--nav-bg:var(--paper);--line:var(--paper-line)" : undefined}>
+        {nav.map((n) => (
+          <a href={n.href} aria-current={path === n.href ? "page" : undefined} style={paper && path === n.href ? "color:var(--paper-accent)" : undefined}>{n.label}</a>
+        ))}
+        <a class:list={["btn", "btn--sm", paper ? "btn--ink" : "btn--acc"]} href={spotify} target="_blank" rel="noopener">Listen</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <slot />
+  </main>
+
+  <footer class="foot" style={paper ? "background:var(--ink);color:var(--bone)" : undefined}>
+    <div class="wrap">
+      <div class="stack" style="gap:16px">
+        <p class="mono" style="color:var(--mute);margin:0">Bookings, press &amp; everything else</p>
+        <a class="foot__mail" href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+      <div class="foot__cols">
+        <div><span class="mono" style="color:var(--mute)">Listen</span>{platforms.map((p) => <a href={p.url} target="_blank" rel="noopener">{p.name}</a>)}</div>
+        <div><span class="mono" style="color:var(--mute)">Follow @chiefazu</span>{socials.map((s) => <a href={s.url} target="_blank" rel="noopener">{s.name}</a>)}</div>
+        <div><span class="mono" style="color:var(--mute)">Site</span>{nav.map((n) => <a href={n.href}>{n.label}</a>)}</div>
+        <div><span class="mono" style="color:var(--mute)">Elsewhere</span><a href={walls} target="_blank" rel="noopener">wallsofazu.com ↗</a><a href="/story#press">Press &amp; bookings</a></div>
+      </div>
+      <div class="foot__base">
+        <span>© {new Date().getFullYear()} {site.name}. All rights reserved.</span>
+        <span>Made in {site.city}</span>
+      </div>
+    </div>
+    <div class="disp foot__mark" aria-hidden="true">AZU</div>
+  </footer>
+
+  <Player client:idle title="Juzi" artist={site.name} art="/assets/video/juzi.jpg" spotify={spotify} src={site.playerSrc || undefined} />
+
+  <script src="../scripts/site.ts"></script>
+</body>
+</html>

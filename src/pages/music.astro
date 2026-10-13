@@ -1,0 +1,77 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import Clip from "../components/Clip.astro";
+import PlatformList from "../components/PlatformList.astro";
+import SectionHead from "../components/SectionHead.astro";
+import JoinForm from "../components/JoinForm.astro";
+import { spotify, walls } from "../data/site";
+
+const songs = await getCollection("songs");
+const books = await getCollection("books");
+const videos = await getCollection("videos");
+const featured = videos.find((v) => v.data.featured) ?? videos[0];
+const bookNo = (id?: string) => books.find((b) => b.id === id)?.data.no;
+---
+<Base title="Music — Azu" description="Every release by Azu — Juzi, Siku, Wote and more. Stream on Spotify, Apple Music, Audiomack, Boomplay and YouTube.">
+  <section class="sec" id="top" style="padding-bottom:0">
+    <div class="wrap g2 g2--c">
+      <div class="stack stack--lg">
+        <p class="mono eyebrow">Every release</p>
+        <h1 class="disp h1">Music</h1>
+        <p class="lede" style="color:var(--bone);font-size:clamp(18px,1.6vw,22px)">Swahili music has never sounded sweeter. {songs.length} songs so far, {books.length} of them with a story you can read — all free, all everywhere.</p>
+        <div class="cta-row">
+          <a class="btn btn--acc" href={spotify} target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1.5v9l8-4.5z" fill="currentColor"/></svg>Listen on Spotify</a>
+          <a class="btn" href="#releases">All releases ↓</a>
+        </div>
+      </div>
+      <Clip video={featured} href="/watch" />
+    </div>
+  </section>
+
+  <section class="sec" id="listen">
+    <div class="wrap g2">
+      <div class="stack sticky">
+        <p class="mono eyebrow">01 — Listen everywhere</p>
+        <h2 class="disp h2">Pick your <span class="ser">platform</span></h2>
+        <p class="lede">Same songs, wherever you already are. Follow on one and you'll never miss a release.</p>
+      </div>
+      <PlatformList verb="Follow" class="rv" />
+    </div>
+  </section>
+
+  <section class="sec dim" id="releases">
+    <div class="wrap">
+      <SectionHead eyebrow="02 — Releases" heading={`${["Ten","Nine","Eight","Seven","Six","Five","Four","Three","Two","One"][10 - Math.min(songs.length, 10)] ?? songs.length} songs`}><span class="mono" style="color:var(--mute)">Newest first</span></SectionHead>
+      <div class="rows rv">
+        {songs.map((s, i) => (
+          <div class:list={["trk", s.data.latest && "trk--on"]}>
+            {s.data.latest
+              ? <span class="eq" aria-label="Latest"><i></i><i></i><i></i></span>
+              : <span class="n">{String(i + 1).padStart(2, "0")}</span>}
+            <span style={s.data.latest ? "font-weight:600" : undefined}>{s.data.title}{s.data.note && <> <span class="ser" style="color:var(--mute);font-size:.95em">{s.data.note}</span></>}</span>
+            <span class="row__end">
+              {s.data.video && <a class="btn btn--xs" href={`/watch#${s.data.video}`}>Watch</a>}
+              {s.data.book && <a class="btn btn--xs" href={`/walls#${s.data.book}`}>Story #{bookNo(s.data.book)}</a>}
+              <a class:list={["btn", "btn--xs", s.data.latest && "btn--acc"]} href={spotify} target="_blank" rel="noopener">Stream</a>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="stories">
+    <div class="wrap g2 g2--c">
+      <div class="tile tile--4x3 rv"><img src="/assets/img/walls.jpg" width="1344" height="768" alt="" loading="lazy" /></div>
+      <div class="stack stack--lg rv">
+        <p class="mono eyebrow">03 — Walls of Azu</p>
+        <h2 class="disp h2">Read the song, <span class="ser">not just hear it</span></h2>
+        <p class="lede">{books.length} of these songs come with a short illustrated book — where it was written, who it's for, what it cost. Free, in PDF and EPUB.</p>
+        <div class="cta-row"><a class="btn btn--acc" href="/walls">Open the library</a><a class="btn" href={walls} target="_blank" rel="noopener">wallsofazu.com ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+  <JoinForm eyebrow="04 — Join" heading="Hear it" italic="first." copy="Every release lands in your inbox the day it's out. One message a month, never more." />
+</Base>

@@ -1,0 +1,39 @@
+---
+/* The accent "join the list" block used at the foot of most pages. */
+interface Props {
+  eyebrow?: string;
+  heading: string;       // plain part
+  italic: string;        // serif part
+  copy: string;
+  button?: string;
+  subject?: string;
+  city?: boolean;        // ask for a city too (presale)
+  id?: string;
+}
+const { eyebrow, heading, italic, copy, button = "Join the list", subject = "Mailing list — chiefazu.com", city = false, id = "join" } = Astro.props;
+const uid = `${id}-contact`;
+---
+<section class="join" id={id}>
+  <div class="wrap">
+    <div class="stack rv">
+      {eyebrow && <p class="mono">{eyebrow}</p>}
+      <h2 class="disp h2" style="font-size:clamp(56px,8vw,120px)">{heading} <span class="ser">{italic}</span></h2>
+      <p>{copy}</p>
+    </div>
+    <form class="rv" data-form data-subject={subject} action="#" method="post">
+      <p class="sr-only" aria-hidden="true"><label>Leave this empty <input name="company" tabindex="-1" autocomplete="off" /></label></p>
+      {city && (
+        <>
+          <label for={`${id}-city`} class="mono">Your city</label>
+          <div class="inrow"><input id={`${id}-city`} name="city" type="text" placeholder="Dar es Salaam, Nairobi, London…" autocomplete="address-level2" /></div>
+        </>
+      )}
+      <label for={uid} class="mono">Email or WhatsApp number</label>
+      <div class="inrow">
+        <input id={uid} name="contact" type="text" placeholder="you@example.com  ·  +255 …" required />
+        <button class="btn btn--ink" type="submit">{button}</button>
+      </div>
+      <p class="note" data-note>Unsubscribe any time. We never share your details.</p>
+    </form>
+  </div>
+</section>

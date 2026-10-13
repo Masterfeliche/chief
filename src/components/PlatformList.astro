@@ -1,0 +1,13 @@
+---
+import { platforms } from "../data/site";
+interface Props { verb?: string; class?: string }
+const { verb, class: cls = "" } = Astro.props;
+---
+<div class:list={["plat", cls]}>
+  {platforms.map((p) => (
+    <a href={p.url} target="_blank" rel="noopener">
+      <span class="plat__name"><img src={p.icon} width="26" height="26" alt="" />{p.name}</span>
+      <span class="mono">{verb ?? p.verb} ↗</span>
+    </a>
+  ))}
+</div>

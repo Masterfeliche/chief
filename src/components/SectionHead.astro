@@ -1,0 +1,12 @@
+---
+interface Props { eyebrow: string; heading: string; italic?: string; lede?: string; max?: string; class?: string }
+const { eyebrow, heading, italic, lede, max, class: cls = "" } = Astro.props;
+---
+<div class:list={["sec-head", "rv", cls]}>
+  <div class="sec-head__t" style={max ? `max-width:${max}` : undefined}>
+    <p class="mono eyebrow">{eyebrow}</p>
+    <h2 class="disp h2">{heading} {italic && <span class="ser">{italic}</span>}</h2>
+    {lede && <p class="lede"><Fragment set:html={lede} /></p>}
+  </div>
+  <slot />
+</div>
